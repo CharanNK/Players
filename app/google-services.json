@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1072634569702",
+    "firebase_url": "https://testfirestore-2c1c9.firebaseio.com",
+    "project_id": "testfirestore-2c1c9",
+    "storage_bucket": "testfirestore-2c1c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1072634569702:android:2279a386ec5bc018",
+        "android_client_info": {
+          "package_name": "com.charanajayworks.iplplayers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1072634569702-eohkjuvuj12nf43q1iicc6lc0o2onfla.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzFKHO-x59RIdSx0dzFD4cahBh4INIjT0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

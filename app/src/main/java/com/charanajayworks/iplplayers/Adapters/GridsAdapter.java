@@ -54,21 +54,50 @@ public class GridsAdapter extends RecyclerView.Adapter<GridsAdapter.ViewHolder> 
                     case "Chennai Super Kings" :
                         Log.d("debug","in csk");
                         intent = new Intent(mContext, TeamDisplayActivity.class);
+                        intent.putExtra("teamname","csk");
                         mContext.startActivity(intent);
                         break;
                     case "Royal Challengers Bangalore":
+                        Log.d("debug","in rcb");
+                        intent = new Intent(mContext, TeamDisplayActivity.class);
+                        intent.putExtra("teamname","royalchallengers");
+                        mContext.startActivity(intent);
                         break;
                     case "Delhi Capitals":
+                        Log.d("debug","in delhi");
+                        intent = new Intent(mContext, TeamDisplayActivity.class);
+                        intent.putExtra("teamname","delhicapitals");
+                        mContext.startActivity(intent);
                         break;
                     case "Kings XI Punjab":
+                        Log.d("debug","in kxip");
+                        intent = new Intent(mContext, TeamDisplayActivity.class);
+                        intent.putExtra("teamname","kingsxipunjab");
+                        mContext.startActivity(intent);
                         break;
                     case "Kolkata Knight Riders":
+                        Log.d("debug","in kkr");
+                        intent = new Intent(mContext, TeamDisplayActivity.class);
+                        intent.putExtra("teamname","kolkataknightriders");
+                        mContext.startActivity(intent);
                         break;
                     case "Mumbai Indians":
+                        Log.d("debug","in mumbai");
+                        intent = new Intent(mContext, TeamDisplayActivity.class);
+                        intent.putExtra("teamname","mumbaiindians");
+                        mContext.startActivity(intent);
                         break;
                     case "Rajastan Royals":
+                        Log.d("debug","in rajastan");
+                        intent = new Intent(mContext, TeamDisplayActivity.class);
+                        intent.putExtra("teamname","rajastanroyals");
+                        mContext.startActivity(intent);
                         break;
                     case "Sunrisers Hyderabad":
+                        Log.d("debug","in srh");
+                        intent = new Intent(mContext, TeamDisplayActivity.class);
+                        intent.putExtra("teamname","sunrisers");
+                        mContext.startActivity(intent);
                         break;
                     default:
                         Log.d("debug","in default");

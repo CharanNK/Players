@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ticketsCardView.setBackgroundResource(R.drawable.tickets);
 
         teamCardView.setOnClickListener(this);
+        fixturesCardView.setOnClickListener(this);
         ticketsCardView.setOnClickListener(this);
     }
 
@@ -36,6 +37,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.teams_CardView :
                 Intent intent = new Intent(MainActivity.this,TeamSelectActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.fixtures_CardView:
+                Intent intent1 = new Intent(MainActivity.this,ScheduleActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.tickets_CardView:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.iplt20.com/schedule")));

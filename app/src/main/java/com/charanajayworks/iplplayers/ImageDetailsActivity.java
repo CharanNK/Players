@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 
-public class DetailsActivity extends AppCompatActivity {
+public class ImageDetailsActivity extends AppCompatActivity {
 
     static final String BUNDLE_IMAGE_ID = "BUNDLE_IMAGE_ID";
 
@@ -36,7 +36,7 @@ public class DetailsActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DetailsActivity.super.onBackPressed();
+                ImageDetailsActivity.super.onBackPressed();
             }
         });
 

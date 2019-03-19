@@ -6,20 +6,30 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.charanajayworks.iplplayers.Models.PlayerDataModel;
 import com.charanajayworks.iplplayers.cards.SliderAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ramotion.cardslider.CardSliderLayoutManager;
 import com.ramotion.cardslider.CardSnapHelper;
+
+import java.util.ArrayList;
 
 public class TeamDisplayActivity extends AppCompatActivity {
 
@@ -39,97 +49,75 @@ public class TeamDisplayActivity extends AppCompatActivity {
     private TextSwitcher nationalityTextSwitcher;
     private TextSwitcher dobTextSwitcher;
     private TextSwitcher iplDebutTextSwitcher;
+    private TextSwitcher playerDescriptionSwitcher;
 
     private SliderAdapter sliderAdapter;
 
-    private String[] imageUrls = {"https://iplstatic.s3.amazonaws.com/players/284/1.png",
-    "https://iplstatic.s3.amazonaws.com/players/284/4944.png",
-    "https://iplstatic.s3.amazonaws.com/players/284/2756.png",
-    "https://iplstatic.s3.amazonaws.com/players/284/4954.png",
-    "https://iplstatic.s3.amazonaws.com/players/284/25.png",
-    "https://iplstatic.s3.amazonaws.com/players/284/140.png",
-    "https://iplstatic.s3.amazonaws.com/players/284/24.png"};
+    private String teamName;
 
-    private String[] playerNames = {
-            "MS Dhoni",
-            "KM Asif",
-            "Sam Billings",
-            "Chaitanya Bishnoi",
-            "Dwayne Bravo",
-            "Deepak Chahar",
-            "Faf du Plessis"
-    };
+    ArrayList<PlayerDataModel> playersList;
 
-    private String[] role = {"Wicketkeeper batsman",
-            "All-rounder",
-            "",
-            "",
-            "All-rounder",
-            "Bowler",
-            "All-rounder"
-    };
+    private String[] imageUrls;
 
-    private String[] battingStyle = {"Right-handed",
-            "Right-handed",
-            "Right-handed",
-            "Left-handed",
-            "Right-handed",
-            "Right-handed",
-            "Right-handed"
-    };
-
-    private String[] bowlingStyle = {"Right-arm medium",
-            "",
-            "",
-            "",
-            "Right-arm medium fast",
-            "Right-arm medium",
-            "Right-arm leg spin"
-    };
-
-    private String[] nationality = {
-            "Indian",
-            "Indian",
-            "English",
-            "Indian",
-            "West Indian",
-            "Indian",
-            "South African"
-    };
-
-    private String[] dob = {
-            "07 July 1981",
-            "24 July 1993",
-            "15 June 1991",
-            "25 August 1994",
-            "07 October 1983",
-            "07 August 1992",
-            "13 July 1984"
-    };
-
-    private String[] iplDebut = {
-            "2008",
-            "",
-            "",
-            "",
-            "2008",
-            "2012",
-            "2012"
-    };
-
-
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myDatabaseRef = database.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.team_players_layout);
 
-        sliderAdapter = new SliderAdapter(imageUrls, imageUrls.length, new OnCardClickListener());
+        teamName = getIntent().getExtras().getString("teamname");
 
-        initRecyclerView();
-        initSwitchers();
-        initPlayerTitle();
+        Log.d("TeamDisplay",teamName);
+
+        playersList = new ArrayList<>();
+
+        myDatabaseRef.addValueEventListener(valueEventListener);
     }
+
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            try {
+                DataSnapshot teamPlayers = dataSnapshot.child(teamName);
+                for (DataSnapshot player : teamPlayers.getChildren()) {
+                    String playerName = player.child("playername").getValue(String.class);
+                    String badge1 = player.child("badge1").getValue(String.class);
+                    String badge2 = player.child("badge2").getValue(String.class);
+                    String imageurl = player.child("imageurl").getValue(String.class);
+                    String playerRole = player.child("role").getValue(String.class);
+                    String battingStyle = player.child("battingstyle").getValue(String.class);
+                    String bowlingStyle = player.child("bowlingstyle").getValue(String.class);
+                    String nationality = player.child("nationality").getValue(String.class);
+                    String dateOfBirth = player.child("dob").getValue(String.class);
+                    String iplDebut = player.child("ipldebut").getValue(String.class);
+                    String playerDesc = player.child("playerdesc").getValue(String.class);
+
+                    PlayerDataModel currentPlayer = new PlayerDataModel(playerName, imageurl, badge1, badge2, playerRole, battingStyle, bowlingStyle, nationality, dateOfBirth, iplDebut, playerDesc);
+                    playersList.add(currentPlayer);
+                }
+
+                imageUrls = new String[playersList.size()];
+
+                for (int i = 0; i < playersList.size(); i++)
+                    imageUrls[i] = playersList.get(i).getImageUrl();
+
+                sliderAdapter = new SliderAdapter(imageUrls, imageUrls.length, new OnCardClickListener());
+
+                initRecyclerView();
+                initSwitchers();
+                initPlayerTitle();
+            }catch (Exception e){
+                Log.e("ERROR",e.getMessage());
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 
     private void initRecyclerView() {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -161,6 +149,9 @@ public class TeamDisplayActivity extends AppCompatActivity {
     }
 
     private void onActiveCardChange(int pos){
+
+        PlayerDataModel currentPlayer = playersList.get(pos%playersList.size());
+
         int animH[] = new int[]{R.anim.slide_in_right, R.anim.slide_out_left};
         int animV[] = new int[]{R.anim.slide_in_top, R.anim.slide_out_bottom};
 
@@ -173,31 +164,33 @@ public class TeamDisplayActivity extends AppCompatActivity {
             animV[1] = R.anim.slide_out_top;
         }
 
-        setPlayerTitle(playerNames[pos],left2right);
+        setPlayerTitle(currentPlayer.getPlayerName(),left2right);
 
         roleTextSwitcher.setInAnimation(this,animV[0]);
         roleTextSwitcher.setOutAnimation(this,animV[1]);
-        roleTextSwitcher.setText(role[pos]);
+        roleTextSwitcher.setText(currentPlayer.getPlayerRole());
 
         battingStyleTextSwitcher.setInAnimation(this,animV[0]);
         battingStyleTextSwitcher.setOutAnimation(this,animV[1]);
-        battingStyleTextSwitcher.setText(battingStyle[pos]);
+        battingStyleTextSwitcher.setText(currentPlayer.getBattingStyle());
 
         bowlingStyleTextSwitcher.setInAnimation(this,animV[0]);
         bowlingStyleTextSwitcher.setOutAnimation(this,animV[1]);
-        bowlingStyleTextSwitcher.setText(bowlingStyle[pos]);
+        bowlingStyleTextSwitcher.setText(currentPlayer.getBowlingStyle());
 
         nationalityTextSwitcher.setInAnimation(this,animV[0]);
         nationalityTextSwitcher.setOutAnimation(this,animV[1]);
-        nationalityTextSwitcher.setText(nationality[pos]);
+        nationalityTextSwitcher.setText(currentPlayer.getNationality());
 
         dobTextSwitcher.setInAnimation(this,animV[0]);
         dobTextSwitcher.setOutAnimation(this,animV[1]);
-        dobTextSwitcher.setText(dob[pos]);
+        dobTextSwitcher.setText(currentPlayer.getDateOfBirth());
 
         iplDebutTextSwitcher.setInAnimation(this,animV[0]);
         iplDebutTextSwitcher.setOutAnimation(this,animV[1]);
-        iplDebutTextSwitcher.setText(iplDebut[pos]);
+        iplDebutTextSwitcher.setText(currentPlayer.getIplDebut());
+
+        playerDescriptionSwitcher.setText(currentPlayer.getPlayerDescription());
 
         currentPosition = pos;
     }
@@ -237,42 +230,50 @@ public class TeamDisplayActivity extends AppCompatActivity {
 
     private void initSwitchers(){
 
+        PlayerDataModel currentPlayer = playersList.get(0);
+
         roleTextSwitcher = findViewById(R.id.rolevalue);
         roleTextSwitcher.setFactory(new TeamDisplayActivity.TextViewFactory(R.style.roleSwitcher,false));
-        roleTextSwitcher.setCurrentText(role[0]);
+        roleTextSwitcher.setCurrentText(currentPlayer.getPlayerRole());
 
         battingStyleTextSwitcher = findViewById(R.id.batting_style_value);
         battingStyleTextSwitcher.setFactory(new TeamDisplayActivity.TextViewFactory(R.style.battingSwitcher,false));
-        battingStyleTextSwitcher.setCurrentText(battingStyle[0]);
+        battingStyleTextSwitcher.setCurrentText(currentPlayer.getBattingStyle());
 
         bowlingStyleTextSwitcher = findViewById(R.id.bowling_style_value);
         bowlingStyleTextSwitcher.setFactory(new TeamDisplayActivity.TextViewFactory(R.style.bowlingSwitcher,false));
-        bowlingStyleTextSwitcher.setCurrentText(bowlingStyle[0]);
+        bowlingStyleTextSwitcher.setCurrentText(currentPlayer.getBowlingStyle());
 
 
         nationalityTextSwitcher = findViewById(R.id.nationality_value);
         nationalityTextSwitcher.setFactory(new TeamDisplayActivity.TextViewFactory(R.style.nationalitySwitcher,false));
-        nationalityTextSwitcher.setCurrentText(nationality[0]);
+        nationalityTextSwitcher.setCurrentText(currentPlayer.getNationality());
 
         dobTextSwitcher = findViewById(R.id.dob_value);
         dobTextSwitcher.setFactory(new TeamDisplayActivity.TextViewFactory(R.style.dobSwitcher,false));
-        dobTextSwitcher.setCurrentText(dob[0]);
+        dobTextSwitcher.setCurrentText(currentPlayer.getDateOfBirth());
 
         iplDebutTextSwitcher = findViewById(R.id.ipl_debut_value);
         iplDebutTextSwitcher.setFactory(new TeamDisplayActivity.TextViewFactory(R.style.debutSwitcher,false));
-        iplDebutTextSwitcher.setCurrentText(iplDebut[0]);
+        iplDebutTextSwitcher.setCurrentText(currentPlayer.getIplDebut());
+
+        playerDescriptionSwitcher = findViewById(R.id.player_description);
+        playerDescriptionSwitcher.setFactory(new TeamDisplayActivity.TextViewFactory(R.style.playerDescSwitcher,false));
+        playerDescriptionSwitcher.setInAnimation(this, R.anim.fade_in);
+        playerDescriptionSwitcher.setOutAnimation(this, R.anim.fade_out);
+        playerDescriptionSwitcher.setCurrentText(currentPlayer.getPlayerDescription());
     }
 
     private void initPlayerTitle(){
         weaponAnimDuration = getResources().getInteger(R.integer.labels_animation_duration);
         weaponOffset1 = getResources().getDimensionPixelSize(R.dimen.left_offset);
         weaponOffset2 = getResources().getDimensionPixelSize(R.dimen.card_width);
-        weapon1TextView = (TextView) findViewById(R.id.tv_weapon_1);
-        weapon2TextView = (TextView) findViewById(R.id.tv_weapon_2);
+        weapon1TextView = (TextView) findViewById(R.id.tv_player1);
+        weapon2TextView = (TextView) findViewById(R.id.tv_player2);
 
         weapon1TextView.setX(weaponOffset1);
         weapon2TextView.setX(weaponOffset2);
-        weapon1TextView.setText(playerNames[0]);
+        weapon1TextView.setText(playersList.get(0).getPlayerName());
         weapon2TextView.setAlpha(0f);
 
         weapon1TextView.setTypeface(Typeface.createFromAsset(getAssets(), "open-sans-extrabold.ttf"));
@@ -295,8 +296,8 @@ public class TeamDisplayActivity extends AppCompatActivity {
 
             final int clickedPosition = recyclerView.getChildAdapterPosition(view);
             if (clickedPosition == activeCardPosition) {
-                final Intent intent = new Intent(TeamDisplayActivity.this, DetailsActivity.class);
-                intent.putExtra(DetailsActivity.BUNDLE_IMAGE_ID, imageUrls[activeCardPosition % imageUrls.length]);
+                final Intent intent = new Intent(TeamDisplayActivity.this, ImageDetailsActivity.class);
+                intent.putExtra(ImageDetailsActivity.BUNDLE_IMAGE_ID, imageUrls[activeCardPosition % imageUrls.length]);
 
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                     startActivity(intent);

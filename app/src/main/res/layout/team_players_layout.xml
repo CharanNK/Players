@@ -15,35 +15,31 @@
             android:id="@+id/weapons"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/frameLayout"
-            android:layout_toLeftOf="@+id/frameLayout">
+            android:layout_centerVertical="true">
 
             <TextView
-                android:id="@+id/tv_weapon_1"
+                android:id="@+id/tv_player1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="Caran"
-                android:textSize="28sp"
+                android:text=""
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_weapon_2"
+                android:id="@+id/tv_player2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Charan"
                 android:layout_gravity="center_vertical"
-                android:textSize="28sp"
+                android:text=""
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
         </FrameLayout>
 
         <FrameLayout
             android:id="@+id/frameLayout"
-            android:layout_width="85dp"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
@@ -64,8 +60,8 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="210dp"
-        android:layout_marginStart="@dimen/recycler_view_left_offset"
         android:layout_marginLeft="@dimen/recycler_view_left_offset"
+        android:layout_marginStart="@dimen/recycler_view_left_offset"
         android:layout_marginTop="18dp"
         android:clipChildren="false"
         android:overScrollMode="never"
@@ -108,12 +104,12 @@
                             android:id="@+id/p1_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="Role" />
+                            android:text="Role"
+                            android:textStyle="bold" />
 
                         <TextSwitcher
                             android:id="@+id/rolevalue"
-                            android:paddingLeft="@dimen/padding20"/>
+                            android:paddingLeft="@dimen/padding20" />
 
 
                     </TableRow>
@@ -130,12 +126,12 @@
                             android:id="@+id/p2_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="Batting Style" />
+                            android:text="Batting Style"
+                            android:textStyle="bold" />
 
                         <TextSwitcher
                             android:id="@+id/batting_style_value"
-                            android:paddingLeft="@dimen/padding20"/>
+                            android:paddingLeft="@dimen/padding20" />
 
                     </TableRow>
 
@@ -151,12 +147,12 @@
                             android:id="@+id/p3_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="Bowling Style" />
+                            android:text="Bowling Style"
+                            android:textStyle="bold" />
 
                         <TextSwitcher
                             android:id="@+id/bowling_style_value"
-                            android:paddingLeft="@dimen/padding20"/>
+                            android:paddingLeft="@dimen/padding20" />
 
                     </TableRow>
 
@@ -172,12 +168,12 @@
                             android:id="@+id/p4_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="Nationality" />
+                            android:text="Nationality"
+                            android:textStyle="bold" />
 
                         <TextSwitcher
                             android:id="@+id/nationality_value"
-                            android:paddingLeft="@dimen/padding20"/>
+                            android:paddingLeft="@dimen/padding20" />
 
                     </TableRow>
 
@@ -193,12 +189,12 @@
                             android:id="@+id/p5_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="DOB" />
+                            android:text="DOB"
+                            android:textStyle="bold" />
 
                         <TextSwitcher
                             android:id="@+id/dob_value"
-                            android:paddingLeft="@dimen/padding20"/>
+                            android:paddingLeft="@dimen/padding20" />
 
                     </TableRow>
 
@@ -214,19 +210,19 @@
                             android:id="@+id/p6_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="IPL Debut" />
+                            android:text="IPL Debut"
+                            android:textStyle="bold" />
 
                         <TextSwitcher
                             android:id="@+id/ipl_debut_value"
-                            android:paddingLeft="@dimen/padding20"/>
+                            android:paddingLeft="@dimen/padding20" />
 
                     </TableRow>
 
                 </TableLayout>
 
                 <TextSwitcher
-                    android:id="@+id/weapon_description"
+                    android:id="@+id/player_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

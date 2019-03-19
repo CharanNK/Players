@@ -31,4 +31,8 @@
     <style name="debutSwitcher">
         <item name="android:gravity">center_vertical</item>
     </style>
+
+    <style name="playerDescSwitcher">
+        <item name="android:gravity">center_vertical</item>
+    </style>
 </resources>
